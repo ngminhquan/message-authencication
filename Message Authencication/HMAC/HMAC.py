@@ -1,6 +1,6 @@
 ﻿import SHA512 as H
 
-#Thiết lập khóa K+ 512bit
+#Thiết lập khóa K+ 1024bit
 def pad0(key):
     if len(key) > 256:          #keylen > 1024bit: cho key đi qua hàm băm sha512
         key = H.SHA_512(key)    #để tạo độ dài 512bit
