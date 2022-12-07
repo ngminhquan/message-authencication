@@ -38,7 +38,7 @@ def HMAC(message, key):
     tag = H.SHA_512(So)         #tag đầu ra là 512bit
     return tag
 
-with open('input.txt', 'r', encoding = 'UTF - 8') as text, open('key.txt', 'r', encoding = 'UTF - 8') as key, open('output.txt', 'w', encoding = 'UTF - 8') as mac:
+with open('input_HMAC.txt', 'r', encoding = 'UTF - 8') as text, open('key_HMAC.txt', 'r', encoding = 'UTF - 8') as key, open('output_HMAC.txt', 'w', encoding = 'UTF - 8') as mac:
     message = text.read()
     key = key.read()
     tag = HMAC(message, key)
