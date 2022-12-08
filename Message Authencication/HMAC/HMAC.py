@@ -43,5 +43,3 @@ with open('input_HMAC.txt', 'r', encoding = 'UTF - 8') as text, open('key_HMAC.t
     key = key.read()
     tag = HMAC(message, key)
     mac.write(tag)
-
-
