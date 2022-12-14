@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HMAC", "HMAC\HMAC.pyproj", "{BE799946-EBBE-4696-ACC2-8BD96831DD85}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CCM_mode", "CCM\CCM_mode.pyproj", "{C9735BAD-2DF6-43C5-AF59-5A2EA11795DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BE799946-EBBE-4696-ACC2-8BD96831DD85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BE799946-EBBE-4696-ACC2-8BD96831DD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9735BAD-2DF6-43C5-AF59-5A2EA11795DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9735BAD-2DF6-43C5-AF59-5A2EA11795DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
