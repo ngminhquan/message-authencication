@@ -1,4 +1,5 @@
-﻿#Input
+﻿import math
+#Input
 
 #pt = '0123456789abcdeffedcba9876543210'
 #key = '0f1571c947d9e8590cb7add6af7f6798'
@@ -17,6 +18,7 @@ def text_to_hex(s):
             c[i] = '0' + c[i]
     for i in c:
         d += i
+    d = d.upper()
     return d
 
 #print(text_to_hex('a\nb'))
@@ -145,18 +147,18 @@ def divide(s, n):
                 a[i] += '0'
     return a
 
-#phép cộng modulo 2^64
-def add(a, b):
+#phép cộng modulo 2^m
+def add(a, b, m):
     val = int(a, 16) + int(b, 16)
-    while val > int(math.pow(2, 64)):
-        val = val - int(math.pow(2, 64))        #đưa về giá trị trong modulo 2^64
+    while val > int(math.pow(2, m)):
+        val = val - int(math.pow(2, m))        #đưa về giá trị trong modulo 2^b
     val = hex(val).replace('0x', '') 
     s = ''
     while 1:
-        if len(s) + len(val) == 16:
+        if len(s) + len(val) == m/4:
             s += val
             break                               #padding các bit '0' để số đầu ra
-        s += '0'                                #tương ứng là 64bit (16 số hexa)
+        s += '0'                                #tương ứng là m_bit (m/4 số hexa)
     s = s.upper()
     return s
 
