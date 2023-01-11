@@ -19,25 +19,29 @@ def bin_str(s, n):
 
 def expand(N, A, P, t):
     a = int(len(A)/2)
-    n = int(len(N)/2)
-    p = int(len(P)/2)      #độ dài chuỗi P được tính theo byte (2 số hexa)
+    n = int(len(N)/2)       #độ dài các chuỗi N, A, P 
+    p = int(len(P)/2)      #được tính theo byte (2 số hexa)
     q = 15 - n
-    Q = bin_str(p, 8*q)
+    Q = bin_str(p, 8*q)     #Q là biểu diễn nhị phân của p với độ dài 8*q
     Q = aes.bin_to_hex(Q)
-    if a == 0:
+
+    if a == 0:              #Adata: xác định xem có Ass.Data hay không
         Adata = '0'
     else: Adata = '1'
     flags = '0' + Adata + bin_str(int((t-2)/2), 3) + bin_str(q-1, 3)
     flags = aes.bin_to_hex(flags)
     B0 = flags + N + Q
+
     #encode value a (độ dài của Ass.Data)
-    if 0 < a < math.pow(2, 16) - math.pow(2, 8):
+    if 0 <= a < math.pow(2, 16) - math.pow(2, 8):
         a_e = aes.bin_to_hex(bin_str(a, 16))
-    elif math.pow(2, 16) - math.pow(2, 8) < a < math.pow(2, 32):
+    elif math.pow(2, 16) - math.pow(2, 8) <= a < math.pow(2, 32):
         a_e = 'FF' + 'FE' + aes.bin_to_hex(bin_str(a, 32))
-    elif math.pow(2, 32) < a < math.pow(2, 64):
+    elif math.pow(2, 32) <= a < math.pow(2, 64):
         a_e = 'FF' + 'FF' + aes.bin_to_hex(bin_str(a, 64))
     Assdata = a_e + A
+
+    #Padding thêm các bit '0' cho đủ một khối
     while len(Assdata) % 32 != 0:
         Assdata += '0'
     while len(P) % 32 != 0:
@@ -62,9 +66,11 @@ def ctr_gen(N, P):                  #tạo bộ thanh ghi cho CTR_mode
     n = int(len(N)/2)
     p = int(len(P)/2)      #độ dài chuỗi P được tính theo byte (2 số hexa)
     q = 15 - n
-    reserve = '0'
+
+    reserve = '0'                   #flag đầu của mỗi ctr
     flags = reserve + reserve + '000' + bin_str(q-1, 3)
     flags = aes.bin_to_hex(flags)
+
     counter = []
     for i in range(0, int(p/16) +2):
         ctr = flags + N + aes.bin_to_hex(bin_str(i, 8*q))
@@ -72,13 +78,13 @@ def ctr_gen(N, P):                  #tạo bộ thanh ghi cho CTR_mode
     return counter
 
 def CCM(N, A, P, key, Tlen):
-    N = N.upper()
+    N = N.upper()               
     A = A.upper()
-    P = P.upper()
     key = key.upper()
     x = []
     s = ''
-    #P = aes.text_to_hex(P)
+
+    P = aes.text_to_hex(P)
     pt = expand(N, A, P, int(Tlen/8))              #tạo khối đầu vào
     tag = CMAC(pt, key, int(Tlen/4))     #thông qua CMAC tạo tag có độ dài Tlen_bit
     print('tag: ', tag)
@@ -91,10 +97,10 @@ def CCM(N, A, P, key, Tlen):
     C = aes.xor_hex(P, s[:len(P)]) + aes.xor_hex(tag, x[0][:len(tag)])
     return C
 
-#N = '101112131415161718191a1b1c'
-#A = ''
-#P = '202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f'
-#Tlen = 112
-#key = '404142434445464748494a4b4c4d4e4f'
+N = '101112131415161718191a1b1c'
+A = '0001020304050607'
+P = 'dai hoc bach khoa ha noi'
+Tlen = 32
+key = '404142434445464748494a4b4c4d4e4f'
 
-
+print(CCM(N, A, P, key, Tlen))

@@ -1,23 +1,13 @@
 ﻿import aes
 import CCM
 
-def CMAC_dec(s, key, Tlen):
-    B = []
-    for i in range(0, len(s), 32):
-        B.append(s[i:i+32])
-    y = aes.encrypt(B[0], key)
-    for i in range(1, len(B)):
-        y = aes.encrypt(aes.xor_hex(B[i], y), key)
-    tag = y[:Tlen]              
-    return tag
-
-
 def ctrgen(N, m):                  #tạo bộ thanh ghi cho CTR_mode
     n = int(len(N)/2)       #độ dài chuỗi được tính theo byte (2 số hexa)
     q = 15 - n
     reserve = '0'
     flags = reserve + reserve + '000' + CCM.bin_str(q-1, 3)
     flags = aes.bin_to_hex(flags)
+
     counter = []
     for i in range(0, m +2):
         ctr = flags + N + aes.bin_to_hex(CCM.bin_str(i, 8*q))
@@ -33,11 +23,13 @@ def CCM_verify(C, N, A, key, Tlen):
     
     x = []
     s = ''
-    if len(C) < Tlen/4:
+    if len(C) < Tlen/4:             #chuyển về INVALID nếu Clen< Tlen
         return 'INVALID1'
+
     m = int(Clen/32) - int(Tlen/128)
     counter = ctrgen(N, m)     
     
+    #encrypt các thanh ghi ctr
     for i in range(0, m + 2):
         x.append(aes.encrypt(counter[i], key))
     for i in range(1, len(x)):
@@ -51,11 +43,11 @@ def CCM_verify(C, N, A, key, Tlen):
     if tag != y[:Tlen]:
         return 'INVALID2'
     else:
-        return P
+        return aes.hex_to_text(P)
 
-N = '10111213141516'
+N = '101112131415161718191a1b1c'
 A = '0001020304050607'
-C = '7162015b4dac255d'
+C = '2DD116AE52CE833020208BD5720BED210BF1A74DBA9F159A75ABC98D'
 Tlen = 32
 key = '404142434445464748494a4b4c4d4e4f'
 
